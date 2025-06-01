@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Live Signal Generator</title>
+</head>
+<body>
+  <h1>Live Signal Generator</h1>
+  <input id="pair" placeholder="Enter Pair (e.g. EURUSD)" />
+  <input id="timeframe" placeholder="Timeframe (e.g. 1min)" />
+  <input id="direction" placeholder="Direction (call/put/both)" />
+  <input id="minAcc" placeholder="Min Accuracy" type="number" />
+  <input id="maxAcc" placeholder="Max Accuracy" type="number" />
+  <select id="source">
+    <option value="twelve">TwelveData</option>
+    <option value="alpha">AlphaVantage</option>
+    <option value="finnhub">Finnhub</option>
+  </select>
+  <button onclick="generateLiveSignal()">Generate</button>
+  <pre id="output"></pre>
+
+  <script>
+    function generateLiveSignal() {
+      const pair = document.getElementById("pair").value;
+      const timeframe = document.getElementById("timeframe").value;
+      const direction = document.getElementById("direction").value;
+      const minAcc = document.getElementById("minAcc").value;
+      const maxAcc = document.getElementById("maxAcc").value;
+      const source = document.getElementById("source").value;
+
+      fetch(`http://localhost:8000/generate?pair=${pair}&timeframe=${timeframe}&direction=${direction}&minAcc=${minAcc}&maxAcc=${maxAcc}&source=${source}&telegram=true`)
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById("output").innerText = JSON.stringify(data, null, 2);
+        });
+    }
+  </script>
+</body>
+</html>
